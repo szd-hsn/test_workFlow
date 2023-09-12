@@ -13,10 +13,13 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
+    - name: Set Environment Variables
+      run: |
+        echo "param1=testValue1" >> $GITHUB_ENV
+        echo "param2=testValue2" >> $GITHUB_ENV
+
     - name: Run Workflow 2
       uses: actions/workflow-run@v1
       with:
-        workflow: "Workflow 2"  
-        inputs:  
-          param1: "TestValue1"
-          param2: "TestValue2"
+        workflow: "Workflow 2"  # Name of the second workflow file
+        ref: main  # Branch or tag where the second workflow should run
