@@ -2,7 +2,7 @@ name: Trigger Workflow Dispatch
 
 on:
   workflow_run:
-    workflows: ["Your Workflow Name"]  # Replace with the name of the workflow you want to trigger
+    workflows: ["workflow.js.yml"]  # Replace with the name of the workflow you want to trigger
     types:
       - completed
 
@@ -15,9 +15,9 @@ jobs:
         with:
           script: |
             const inputs = {
-              tag_name: 'your_tag_name',
-              suite_name: 'your_suite_name',
-              build_id: 'your_build_id'
+              tag_name: 'TagName',
+              suite_name: 'SuteName',
+              build_id: 'BuildID'
             };
             const response = await github.actions.createWorkflowDispatch({
               workflow_id: 'your_workflow_id',  // Replace with the ID of the workflow you want to trigger
@@ -25,5 +25,3 @@ jobs:
               inputs
             });
             console.log(response);
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
