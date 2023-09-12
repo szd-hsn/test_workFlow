@@ -1,0 +1,29 @@
+name: Trigger Workflow Dispatch
+
+on:
+  workflow_run:
+    workflows: ["Your Workflow Name"]  # Replace with the name of the workflow you want to trigger
+    types:
+      - completed
+
+jobs:
+  trigger_workflow:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Workflow Dispatch
+        uses: actions/github-script@v5
+        with:
+          script: |
+            const inputs = {
+              tag_name: 'your_tag_name',
+              suite_name: 'your_suite_name',
+              build_id: 'your_build_id'
+            };
+            const response = await github.actions.createWorkflowDispatch({
+              workflow_id: 'your_workflow_id',  // Replace with the ID of the workflow you want to trigger
+              ref: 'main',  // Replace with the branch where the workflow dispatch file is located
+              inputs
+            });
+            console.log(response);
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
