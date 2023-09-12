@@ -11,11 +11,18 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Download artifact
+    - name: Checkout code
+      uses: actions/checkout@v2
+    
+    - name: Download artifact from Workflow 1
       uses: actions/download-artifact@v2
       with:
         name: my-artifact
-        path: .
+        workflow: "Workflow 1"  # Specify the name of Workflow 1 here
+    
+    - name: Display Parameters
+      run: |
+        cat params.txt  # Display the content of the artifact file
     
     - name: Read parameters from artifact
       run: |
