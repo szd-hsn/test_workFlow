@@ -1,0 +1,22 @@
+name: Workflow 1
+
+on:
+  push:
+    branches:
+      - main  # Adjust this branch name as needed
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Run Workflow 2
+      uses: actions/workflow-run@v1
+      with:
+        workflow: "Workflow 2"  
+        inputs:  
+          param1: "TestValue1"
+          param2: "TestValue2"
