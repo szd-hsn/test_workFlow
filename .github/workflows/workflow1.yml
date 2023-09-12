@@ -17,8 +17,9 @@ jobs:
       run: |
         echo "param1=value1" >> params.txt
         echo "param2=value2" >> params.txt
-    - name: Archive artifact
+
+    - name: Upload artifact
       uses: actions/upload-artifact@v2
       with:
-        name: my-artifact
+        name: my-artifact  # Make sure the artifact name here matches the download step in Workflow 2
         path: params.txt
