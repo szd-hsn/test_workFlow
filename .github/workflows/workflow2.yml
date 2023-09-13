@@ -7,18 +7,19 @@ on:
       - completed
 
 jobs:
-  read_issue:
+  read_env_file:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Read Issue Data
+    - name: Download Environment File
+      uses: actions/download-artifact@v2
+      with:
+        name: env-file
+        path: .
+
+    - name: Read Environment Variables
       run: |
-        commit_message="${{ github.event.workflow_run.head_commit.message }}"
-        issue_number=$(echo "$commit_message" | grep -o '#[0-9]\+' | head -n 1 | sed 's/#//')
-        
-        if [ -n "$issue_number" ]; then
-          curl -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-            "https://api.github.com/repos/${{ github.repository }}/issues/$issue_number/comments"
-        else
-          echo "Issue number not found in commit message."
-        fi
+        source env_file.txt
+        echo "Build ID: $BUILD_ID"
+        echo "Suite Name: $SUITE_NAME"
+        echo "Tag Name: $TAG_NAME"
