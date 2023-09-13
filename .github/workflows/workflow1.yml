@@ -14,3 +14,10 @@ jobs:
           echo "VAR1=my-var1" | tee outputs.var1
           echo "VAR2=my-var2" | tee outputs.var2
           echo "VAR3=my-var3" | tee outputs.var3
+
+  echo:
+    runs-on: ubuntu-latest
+    needs: none
+    steps:
+      - name: Echo
+        run: echo "This job does not depend on any other jobs."
