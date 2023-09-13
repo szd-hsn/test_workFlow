@@ -6,22 +6,17 @@ on:
     types:
       - completed
 
-uses:
-  repo: your-username/your-repo
-  path: .github/workflows/workflow1.yml
-
 jobs:
-  use-data:
-    runs-on: ubuntu-latest
-    needs: workflow1.build
-    steps:
-      - name: Get data
-        run: |
-          echo ${{ needs.workflow1.build.outputs.var1 }}
-          echo ${{ needs.workflow1.build.outputs.var2 }}
-          echo ${{ needs.workflow1.build.outputs.var3 }}
-  echo:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Echo
-        run: echo "This job does not depend on any other jobs."
+      build:
+        runs-on: ubuntu-latest
+
+        steps:
+          - name: Download Artifact
+            uses: actions/download-artifact@v2
+            with:
+              name: my-artifact
+              path: ${{ runner.workspace }}
+
+          - name: Read Variable
+            id: read-variable
+            run: echo "The value of MY_VARIABLE is ${{ env.MY_VARIABLE }}"
