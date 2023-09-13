@@ -16,7 +16,7 @@ jobs:
         echo "suite_name=MySuite" >> variables.txt
         echo "tag_name=v1.0.0" >> variables.txt
 
-    - name: Upload Variables
+    - name: Upload Variables 
       uses: actions/upload-artifact@v2
       with:
         name: my-artifact
