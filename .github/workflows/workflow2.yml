@@ -6,6 +6,10 @@ on:
     types:
       - completed
 
+uses:
+  repo: your-username/your-repo
+  path: .github/workflows/workflow1.yml
+
 jobs:
   use-data:
     runs-on: ubuntu-latest
