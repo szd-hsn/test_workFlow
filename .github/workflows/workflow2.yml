@@ -1,10 +1,9 @@
 name: Workflow 2
 
 on:
-  workflow_run:
-    workflows: ["Workflow 1"]
+  repository_dispatch:
     types:
-      - completed
+      - workflow1-trigger
 
 jobs:
   read_variables:
