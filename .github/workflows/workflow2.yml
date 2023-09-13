@@ -7,9 +7,9 @@ on:
       - completed
 
 jobs:
-  read_variables:
+  use-data:
     runs-on: ubuntu-latest
-
+    needs: build
     steps:
       - name: Get data
         run: |
