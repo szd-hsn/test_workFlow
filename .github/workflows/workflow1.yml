@@ -6,15 +6,18 @@ on:
       - main
 
 jobs:
-  create_issue:
+  set_env_file:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Create Issue
+    - name: Create Environment File
       run: |
-        echo "Creating issue..."
-        issue_data="{\"title\":\"Passing Data\",\"body\":\"param1=value1\\nparam2=value2\"}"  # Replace with your data
-        response=$(curl -X POST -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" -d "$issue_data" "https://api.github.com/repos/${GITHUB_REPOSITORY}/issues")
-        echo "Response: $response"
-    env:
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        echo "BUILD_ID=12345" > env_file.txt
+        echo "SUITE_NAME=MySuite" >> env_file.txt
+        echo "TAG_NAME=v1.0.0" >> env_file.txt
+
+    - name: Upload Environment File
+      uses: actions/upload-artifact@v2
+      with:
+        name: env-file
+        path: env_file.txt
