@@ -9,15 +9,12 @@ jobs:
   trigger_workflow_2:
     runs-on: ubuntu-latest
 
-    steps:
-    - name: Trigger Workflow 2
-      run: |
-        echo "::set-env name=BUILD_ID::12345"
-        echo "::set-env name=SUITE_NAME::MySuite"
-        echo "::set-env name=TAG_NAME::v1.0.0"
-        echo "Variables set for Workflow 2."
-      shell: bash
+    env:
+      BUILD_ID: 12345
+      SUITE_NAME: MySuite
+      TAG_NAME: v1.0.0
 
+    steps:
     - name: Dispatch Workflow 2
       uses: peter-evans/repository-dispatch@v1
       with:
