@@ -16,3 +16,8 @@ jobs:
           echo ${{ needs.workflow1.build.outputs.var1 }}
           echo ${{ needs.workflow1.build.outputs.var2 }}
           echo ${{ needs.workflow1.build.outputs.var3 }}
+  echo:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Echo
+        run: echo "This job does not depend on any other jobs."
