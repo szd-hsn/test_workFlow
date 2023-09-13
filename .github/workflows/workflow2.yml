@@ -12,23 +12,12 @@ jobs:
 
     steps:
     - name: Read Issue Data
-      uses: actions/github-script@v5
-      with:
-        script: |
-          const commitMessage = github.context.payload.workflow_run.head_commit.message;
-          const issueNumberMatch = commitMessage.match(/#(\d+)/);
-          
-          if (issueNumberMatch) {
-            const issueNumber = issueNumberMatch[1];
-            const response = await github.rest.issues.listComments({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: parseInt(issueNumber),
-            });
-            const params = response.data.map(comment => comment.body).join('\n');
-            console.log(params);
-          } else {
-            console.log('Issue number not found in commit message.');
-          }
-    env:
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        commit_message=$(git log --format=%B -n 1 ${{ github.event.workflow_run.head_commit.id }})
+        issue_number=$(echo "$commit_message" | grep -oP '#\d+' | sed 's/#//')
+        if [ -n "$issue_number" ]; then
+          echo "Found issue number: $issue_number"
+          # Now you can use $issue_number to fetch the issue comments
+        else
+          echo "Issue number not found in commit message."
+        fi
