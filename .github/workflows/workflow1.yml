@@ -11,14 +11,10 @@ jobs:
 
     steps:
     - name: Create Issue
-      uses: actions/github-script@v5
-      with:
-        script: |
-          github.issues.create({
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            title: 'Passing Data',
-            body: 'param1=value1\nparam2=value2', // Your data here
-          });
+      run: |
+        echo "Creating issue..."
+        issue_data="{\"title\":\"Passing Data\",\"body\":\"param1=value1\\nparam2=value2\"}"  # Replace with your data
+        response=$(curl -X POST -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" -d "$issue_data" "https://api.github.com/repos/${GITHUB_REPOSITORY}/issues")
+        echo "Response: $response"
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
