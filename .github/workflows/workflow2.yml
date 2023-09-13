@@ -7,23 +7,20 @@ on:
       - completed
 
 jobs:
-  build:
+  read_issue:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Download artifact
-      uses: actions/download-artifact@v2
+    - name: Read Issue Data
+      uses: actions/github-script@v5
       with:
-        name: my-artifact  # Make sure this name matches the upload step in Workflow 1
-        path: .
-
-    - name: Display Parameters
-      run: |
-        cat params.txt  # Display the content of the artifact file
-    
-    - name: Read parameters from artifact
-      run: |
-        param1=$(cat params.txt | grep "param1" | cut -d'=' -f2)
-        param2=$(cat params.txt | grep "param2" | cut -d'=' -f2)
-        echo "Parameter 1: $param1"
-        echo "Parameter 2: $param2"
+        script: |
+          const { data } = await github.issues.listComments({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            issue_number: context.payload.workflow_run.head_commit.message.split('\n')[0].split(' #')[1], // Extract the issue number from the commit message
+          });
+          const params = data.map(comment => comment.body).join('\n');
+          console.log(params);
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
