@@ -11,13 +11,21 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    - name: Extract Issue Number
+      id: extract-issue-number
+      run: echo "::set-output name=issue_number::$(echo ${{ github.event.workflow_run.head_commit.message }} | grep -oP '#\\d+' | grep -oP '\\d+')"
+
     - name: Read Issue Data
-      run: |
-        commit_message=$(git log --format=%B -n 1 ${{ github.event.workflow_run.head_commit.id }})
-        issue_number=$(echo "$commit_message" | grep -oP '#\d+' | sed 's/#//')
-        if [ -n "$issue_number" ]; then
-          echo "Found issue number: $issue_number"
-          # Now you can use $issue_number to fetch the issue comments
-        else
-          echo "Issue number not found in commit message."
-        fi
+      uses: actions/github-script@v5
+      with:
+        script: |
+          const issueNumber = ${{ steps.extract-issue-number.outputs.issue_number }};
+          const response = await github.rest.issues.listComments({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            issue_number: parseInt(issueNumber),
+          });
+          const params = response.data.map(comment => comment.body).join('\n');
+          console.log(params);
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
