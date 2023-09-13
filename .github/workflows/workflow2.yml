@@ -11,15 +11,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Download Variables
-      uses: actions/download-artifact@v2
-      with:
-        name: my-artifact
-        path: ../
-
-    - name: Read Variables
-      run: |
-        source variables.txt  # Load the variables
-        echo "Build ID: $build_id"
-        echo "Suite Name: $suite_name"
-        echo "Tag Name: $tag_name"
+      - name: Get data
+        run: |
+          echo ${{ needs.build.outputs.var1 }}
+          echo ${{ needs.build.outputs.var2 }}
+          echo ${{ needs.build.outputs.var3 }}
