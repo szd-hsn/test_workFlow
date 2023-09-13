@@ -6,18 +6,18 @@ on:
       - main
 
 jobs:
-  set_env_file:
+  set_variables:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Create Environment File
+    - name: Set Variables
       run: |
-        echo "BUILD_ID=12345" > env_file.txt
-        echo "SUITE_NAME=MySuite" >> env_file.txt
-        echo "TAG_NAME=v1.0.0" >> env_file.txt
+        echo "build_id=12345" > variables.txt
+        echo "suite_name=MySuite" >> variables.txt
+        echo "tag_name=v1.0.0" >> variables.txt
 
-    - name: Upload Environment File
+    - name: Upload Variables
       uses: actions/upload-artifact@v2
       with:
-        name: env-file
-        path: env_file.txt
+        name: my-artifact
+        path: variables.txt
