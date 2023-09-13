@@ -1,17 +1,24 @@
 name: Workflow 2
 
 on:
-  repository_dispatch:
+  workflow_run:
+    workflows: ["Workflow 1"]
     types:
-      - workflow1-trigger
+      - completed
 
 jobs:
-  read_variables:
+  read_issue:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Read Environment Variables
+    - name: Read Issue Data
       run: |
-        echo "Build ID: $BUILD_ID"
-        echo "Suite Name: $SUITE_NAME"
-        echo "Tag Name: $TAG_NAME"
+        commit_message="${{ github.event.workflow_run.head_commit.message }}"
+        issue_number=$(echo "$commit_message" | grep -o '#[0-9]\+' | head -n 1 | sed 's/#//')
+        
+        if [ -n "$issue_number" ]; then
+          curl -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            "https://api.github.com/repos/${{ github.repository }}/issues/$issue_number/comments"
+        else
+          echo "Issue number not found in commit message."
+        fi
