@@ -6,20 +6,19 @@ on:
       - main
 
 jobs:
-  build:
+  create_issue:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
-
-    - name: Create artifact file
-      run: |
-        echo "param1=value1" >> params.txt
-        echo "param2=value2" >> params.txt
-
-    - name: Upload artifact
-      uses: actions/upload-artifact@v2
+    - name: Create Issue
+      uses: actions/github-script@v5
       with:
-        name: my-artifact  # Make sure the artifact name here matches the download step in Workflow 2
-        path: params.txt
+        script: |
+          const issue = await github.issues.create({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            title: 'Passing Data',
+            body: 'param1=value1\nparam2=value2', // Your data here
+          });
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
