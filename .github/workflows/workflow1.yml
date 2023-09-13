@@ -6,12 +6,11 @@ on:
       - main
 
 jobs:
-  set_variables:
+  build:
     runs-on: ubuntu-latest
-
     steps:
-    - name: Set outputs
-      run: |
+      - name: Set outputs
+        run: |
           echo "VAR1=my-var1" | tee outputs.var1
           echo "VAR2=my-var2" | tee outputs.var2
           echo "VAR3=my-var3" | tee outputs.var3
