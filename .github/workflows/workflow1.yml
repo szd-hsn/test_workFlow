@@ -6,17 +6,15 @@ on:
       - main
 
 jobs:
-  trigger_workflow_2:
+  create_issue:
     runs-on: ubuntu-latest
 
-    env:
-      BUILD_ID: 12345
-      SUITE_NAME: MySuite
-      TAG_NAME: v1.0.0
-
     steps:
-    - name: Dispatch Workflow 2
-      uses: peter-evans/repository-dispatch@v1
-      with:
-        workflow: Workflow 2
-        token: ${{ secrets.GITHUB_TOKEN }}
+    - name: Create Issue
+      run: |
+        echo "Creating issue..."
+        issue_data="{\"title\":\"Passing Data\",\"body\":\"param1=value1\\nparam2=value2\"}"  # Replace with your data
+        response=$(curl -X POST -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" -d "$issue_data" "https://api.github.com/repos/${GITHUB_REPOSITORY}/issues")
+        echo "Response: $response"
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
