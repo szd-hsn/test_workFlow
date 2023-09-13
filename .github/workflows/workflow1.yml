@@ -8,15 +8,14 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    steps:
-      - name: Set outputs
-        run: |
-          echo "VAR1=my-var1" | tee outputs.var1
-          echo "VAR2=my-var2" | tee outputs.var2
-          echo "VAR3=my-var3" | tee outputs.var3
 
-  echo:
-    runs-on: ubuntu-latest
     steps:
-      - name: Echo
-        run: echo "This job does not depend on any other jobs."
+      - name: Set Variable
+        id: set-variable
+        run: echo "MY_VARIABLE=Hello from Workflow A" >> $GITHUB_ENV
+
+      - name: Create Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: my-artifact
+          path: ${{ runner.workspace }}
